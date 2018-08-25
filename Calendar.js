@@ -25,6 +25,7 @@ export default class Calendar extends Component {
   static propTypes = {
     i18n: PropTypes.string,
     format: PropTypes.string,
+    singleDay: PropTypes.bool,
     customI18n: PropTypes.object,
     color: PropTypes.object,
     minDate: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
@@ -34,7 +35,8 @@ export default class Calendar extends Component {
     format: 'YYYY-MM-DD',
     i18n: 'en',
     customI18n: {},
-    color: {}
+    color: {},
+    singleDay: false
   }
   static I18N_MAP = {
     'zh': {
@@ -197,10 +199,13 @@ export default class Calendar extends Component {
     });
   }
   confirm () {
-    const {
+    var {
       startDate,
       endDate
     } = this.state;
+
+    if (!endDate )endDate = startDate;
+
     let startMoment = startDate ? startDate.clone() : null;
     let endMoment = endDate ? endDate.clone() : null;
     this.props.onConfirm && this.props.onConfirm({
@@ -230,7 +235,7 @@ export default class Calendar extends Component {
     let subBack = {backgroundColor: subColor};
     let mainFontColor = {color: mainColor};
     let subFontColor = {color: subColor};
-    let isValid = !startDate || endDate;
+    let isValid = startDate;
     let isClearVisible = startDate || endDate;
     return (
       <Modal
